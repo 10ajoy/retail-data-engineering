@@ -51,7 +51,13 @@
 				"inputs": [
 					{
 						"referenceName": "DS_Retail_Orders_Source",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": {
+								"value": "@pipeline().parameters.pSourceFolder",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"outputs": [
@@ -62,6 +68,24 @@
 				]
 			}
 		],
+		"parameters": {
+			"pSourceFolder": {
+				"type": "string",
+				"defaultValue": "source/orders"
+			},
+			"pSourceFile": {
+				"type": "string",
+				"defaultValue": "orders.csv"
+			},
+			"pSinkFolder": {
+				"type": "string",
+				"defaultValue": "landing/orders"
+			},
+			"pSinkFile": {
+				"type": "string",
+				"defaultValue": "orders_copy.csv"
+			}
+		},
 		"annotations": []
 	}
 }
