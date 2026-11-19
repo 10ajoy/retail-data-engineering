@@ -1,0 +1,16 @@
+{
+	"name": "adf-retail-dev-261119-8809",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true,
+			"isExplicitlySet": false
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "70b4abe5-9557-48fc-801b-e0de077f0252",
+		"tenantId": "6a1e8622-2eeb-42d9-a040-4b8fd3658a5d"
+	}
+}
