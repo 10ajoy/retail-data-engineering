@@ -56,6 +56,10 @@
 							"folderPath": {
 								"value": "@pipeline().parameters.pSourceFolder",
 								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@pipeline().parameters.pSourceFile",
+								"type": "Expression"
 							}
 						}
 					}
@@ -63,7 +67,17 @@
 				"outputs": [
 					{
 						"referenceName": "DS_Retail_Orders_Landing",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": {
+								"value": "@pipeline().parameters.pSinkFolder",
+								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@pipeline().parameters.pSinkFile",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
