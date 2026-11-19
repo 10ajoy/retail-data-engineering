@@ -1,0 +1,11 @@
+{
+	"name": "LS_ADLS_Retail",
+	"properties": {
+		"description": "Connection to Retail ADLS Gen2",
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://stretaildev2611182610.dfs.core.windows.net/"
+		}
+	}
+}
