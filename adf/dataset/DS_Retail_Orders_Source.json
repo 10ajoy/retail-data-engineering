@@ -5,13 +5,29 @@
 			"referenceName": "LS_ADLS_Retail",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"folderPath": {
+				"type": "string",
+				"defaultValue": "source/orders"
+			},
+			"fileName": {
+				"type": "string",
+				"defaultValue": "orders.csv"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "orders.csv",
-				"folderPath": "source/orders",
+				"fileName": {
+					"value": "@dataset().fileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().folderPath",
+					"type": "Expression"
+				},
 				"fileSystem": "datalake"
 			},
 			"columnDelimiter": ",",
