@@ -60,6 +60,10 @@
 							"fileName": {
 								"value": "@pipeline().parameters.pSourceFile",
 								"type": "Expression"
+							},
+							"containerName": {
+								"value": "@pipeline().parameters.pSourceContainer",
+								"type": "Expression"
 							}
 						}
 					}
@@ -75,6 +79,10 @@
 							},
 							"fileName": {
 								"value": "@pipeline().parameters.pSinkFile",
+								"type": "Expression"
+							},
+							"containerName": {
+								"value": "@pipeline().parameters.pSinkContainer",
 								"type": "Expression"
 							}
 						}
