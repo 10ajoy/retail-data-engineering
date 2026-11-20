@@ -45,7 +45,51 @@
 						"value": "@activity('Lookup_Ingestion_Config').output.value",
 						"type": "Expression"
 					},
-					"isSequential": true
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Execute_Retail_Ingestion",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"policy": {
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PL_Retail_Orders_Ingestion",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"pSourceFolder": {
+										"value": "@item().source_folder",
+										"type": "Expression"
+									},
+									"pSourceFile": {
+										"value": "@item().source_file_name",
+										"type": "Expression"
+									},
+									"pSinkFolder": {
+										"value": "@item().sink_folder",
+										"type": "Expression"
+									},
+									"pSinkFile": {
+										"value": "@item().sink_file_name",
+										"type": "Expression"
+									},
+									"pSourceContainer": {
+										"value": "@item().source_container",
+										"type": "Expression"
+									},
+									"pSinkContainer": {
+										"value": "@item().sink_container",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
 				}
 			}
 		],
