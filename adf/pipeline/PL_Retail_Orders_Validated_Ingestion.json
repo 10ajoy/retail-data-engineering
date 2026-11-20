@@ -1,0 +1,178 @@
+{
+	"name": "PL_Retail_Orders_Validated_Ingestion",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get_Source_File_Metadata",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_Retail_Orders_Source",
+						"type": "DatasetReference",
+						"parameters": {
+							"folderPath": {
+								"value": "@pipeline().parameters.pSourceFolder",
+								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@pipeline().parameters.pSourceFile",
+								"type": "Expression"
+							}
+						}
+					},
+					"fieldList": [
+						"exists",
+						"size",
+						"lastModified"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "IF_Source_File_Exists",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Get_Source_File_Metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Get_Source_File_Metadata').output.exists",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Fail_Source_File_Missing",
+							"type": "Fail",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"message": "Required retail orders source file does not exist.",
+								"errorCode": "SOURCE_FILE_NOT_FOUND"
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Copy_Orders_To_Landing_Validated",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Retail_Orders_Source",
+									"type": "DatasetReference",
+									"parameters": {
+										"folderPath": {
+											"value": "@pipeline().parameters.pSourceFolder",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.pSourceFile",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_Retail_Orders_Landing",
+									"type": "DatasetReference",
+									"parameters": {
+										"folderPath": {
+											"value": "@pipeline().parameters.pSinkFolder",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.pSinkFile",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"pSourceFolder": {
+				"type": "string",
+				"defaultValue": "source/orders"
+			},
+			"pSourceFile": {
+				"type": "string",
+				"defaultValue": "orders.csv"
+			},
+			"pSinkFolder": {
+				"type": "string",
+				"defaultValue": "landing/orders"
+			},
+			"pSinkFile": {
+				"type": "string",
+				"defaultValue": "orders_validated.csv"
+			}
+		},
+		"annotations": []
+	}
+}
