@@ -5,14 +5,34 @@
 			"referenceName": "LS_ADLS_Retail",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"containerName": {
+				"type": "string"
+			},
+			"folderPath": {
+				"type": "string"
+			},
+			"fileName": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "customers_delta_processed.csv",
-				"folderPath": "landing/customers/incremental",
-				"fileSystem": "datalake"
+				"fileName": {
+					"value": "@dataset().fileName",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().folderPath",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().containerName",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
