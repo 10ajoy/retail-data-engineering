@@ -85,6 +85,14 @@
 									"pSinkContainer": {
 										"value": "@item().sink_container",
 										"type": "Expression"
+									},
+									"pIngestionId": {
+										"value": "@item().ingestion_id",
+										"type": "Expression"
+									},
+									"pParentPipelineRunId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
 									}
 								}
 							}
