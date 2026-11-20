@@ -159,6 +159,99 @@
 					"referenceName": "LS_AzureSQL_Retail_Metadata",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "SP_Audit_Success",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy_Orders_To_Landing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[usp_ingestion_audit_success]",
+					"storedProcedureParameters": {
+						"pipeline_run_id": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"rows_read": {
+							"value": {
+								"value": "@activity('Copy_Orders_To_Landing').output.rowsRead",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"rows_copied": {
+							"value": {
+								"value": "@activity('Copy_Orders_To_Landing').output.rowsCopied",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_Retail_Metadata",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "SP_Audit_Failure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Copy_Orders_To_Landing",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[usp_ingestion_audit_failure]",
+					"storedProcedureParameters": {
+						"pipeline_run_id": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"error_message": {
+							"value": {
+								"value": "@string(activity('Copy_Orders_To_Landing').error.message)",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_Retail_Metadata",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"parameters": {
