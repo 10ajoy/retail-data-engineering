@@ -1,0 +1,14 @@
+{
+	"name": "LS_AzureSQL_Retail_Metadata",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "retail-server-v0.database.windows.net",
+			"database": "retail_metadata",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SystemAssignedManagedIdentity"
+		}
+	}
+}
