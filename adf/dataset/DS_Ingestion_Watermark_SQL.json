@@ -1,0 +1,41 @@
+{
+	"name": "DS_Ingestion_Watermark_SQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_Retail_Metadata",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "watermark_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ingestion_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "watermark_column",
+				"type": "varchar"
+			},
+			{
+				"name": "last_watermark_value",
+				"type": "datetime2",
+				"scale": 3
+			},
+			{
+				"name": "last_updated_at",
+				"type": "datetime2",
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ingestion_watermark"
+		}
+	}
+}
