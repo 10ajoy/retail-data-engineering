@@ -13,6 +13,10 @@
 			"fileName": {
 				"type": "string",
 				"defaultValue": "orders.csv"
+			},
+			"containerName": {
+				"type": "string",
+				"defaultValue": "datalake"
 			}
 		},
 		"annotations": [],
@@ -28,7 +32,10 @@
 					"value": "@dataset().folderPath",
 					"type": "Expression"
 				},
-				"fileSystem": "datalake"
+				"fileSystem": {
+					"value": "@dataset().containerName",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

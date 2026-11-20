@@ -1,0 +1,64 @@
+{
+	"name": "DS_Ingestion_Config_SQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_Retail_Metadata",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ingestion_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "source_container",
+				"type": "varchar"
+			},
+			{
+				"name": "source_folder",
+				"type": "varchar"
+			},
+			{
+				"name": "source_file_name",
+				"type": "varchar"
+			},
+			{
+				"name": "sink_container",
+				"type": "varchar"
+			},
+			{
+				"name": "sink_folder",
+				"type": "varchar"
+			},
+			{
+				"name": "sink_file_name",
+				"type": "varchar"
+			},
+			{
+				"name": "file_format",
+				"type": "varchar"
+			},
+			{
+				"name": "is_active",
+				"type": "bit"
+			},
+			{
+				"name": "created_at",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "updated_at",
+				"type": "datetime2",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ingestion_config"
+		}
+	}
+}
