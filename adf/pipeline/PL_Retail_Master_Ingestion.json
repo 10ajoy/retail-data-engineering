@@ -103,6 +103,8 @@
 			{
 				"name": "Lookup_Customers_Watermark",
 				"type": "Lookup",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -128,6 +130,8 @@
 			{
 				"name": "Execute_Customers_Incremental",
 				"type": "ExecuteDataFlow",
+				"state": "Inactive",
+				"onInactiveMarkAs": "Succeeded",
 				"dependsOn": [
 					{
 						"activity": "Lookup_Customers_Watermark",
