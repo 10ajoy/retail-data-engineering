@@ -189,16 +189,16 @@
 							},
 							"type": "String"
 						},
-						"rows_read": {
+						"data_read_bytes": {
 							"value": {
-								"value": "@activity('Copy_Orders_To_Landing').output.rowsRead",
+								"value": "@activity('Copy_Orders_To_Landing').output.dataRead",
 								"type": "Expression"
 							},
 							"type": "Int16"
 						},
-						"rows_copied": {
+						"data_written_bytes": {
 							"value": {
-								"value": "@activity('Copy_Orders_To_Landing').output.rowsCopied",
+								"value": "@activity('Copy_Orders_To_Landing').output.dataWritten",
 								"type": "Expression"
 							},
 							"type": "Int16"
