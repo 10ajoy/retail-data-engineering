@@ -1,0 +1,70 @@
+{
+	"name": "PL_Retail_Customers_Incremental",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup_Customers_Watermark",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT\n    c.ingestion_id,\n    c.source_folder,\n    w.watermark_column,\n    w.last_watermark_value\nFROM dbo.ingestion_config c\nJOIN dbo.ingestion_watermark w\n    ON c.ingestion_id = w.ingestion_id\nWHERE c.source_folder = 'source/customers'\n  AND c.is_active = 1;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_Ingestion_Watermark_SQL",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Execute_Customers_Incremental",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [
+					{
+						"activity": "Lookup_Customers_Watermark",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Customers_Incremental",
+						"type": "DataFlowReference",
+						"parameters": {
+							"watermark_value": {
+								"value": "'@{formatDateTime(\n    activity('Lookup_Customers_Watermark').output.firstRow.last_watermark_value,\n    'yyyy-MM-dd HH:mm:ss'\n)}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
