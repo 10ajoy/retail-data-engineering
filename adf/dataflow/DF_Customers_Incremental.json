@@ -12,7 +12,15 @@
 					"name": "SourceCustomersDelta"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Customers_Incremental_Sink",
+						"type": "DatasetReference"
+					},
+					"name": "SinkCustomersIncremental"
+				}
+			],
 			"transformations": [
 				{
 					"name": "FilterNewAndUpdatedCustomers"
@@ -37,7 +45,14 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> SourceCustomersDelta",
-				"SourceCustomersDelta filter(ERROR_FUNCTION('toTimestamp(updated_at, __SINGLE_QUOTE__yyyy-MM-dd__SINGLE_QUOTE____SINGLE_QUOTE__T__SINGLE_QUOTE____SINGLE_QUOTE__HH:mm:ss__SINGLE_QUOTE__)__NEW_LINE_N__    > toTimestamp($watermark_value, __SINGLE_QUOTE__yyyy-MM-dd HH:mm:ss__SINGLE_QUOTE__)')) ~> FilterNewAndUpdatedCustomers"
+				"SourceCustomersDelta filter(toTimestamp(updated_at) > toTimestamp($watermark_value)) ~> FilterNewAndUpdatedCustomers",
+				"FilterNewAndUpdatedCustomers sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SinkCustomersIncremental"
 			]
 		}
 	}
