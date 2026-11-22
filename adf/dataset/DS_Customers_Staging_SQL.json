@@ -1,0 +1,59 @@
+{
+	"name": "DS_Customers_Staging_SQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_Retail_Metadata",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "customer_id",
+				"type": "varchar"
+			},
+			{
+				"name": "first_name",
+				"type": "varchar"
+			},
+			{
+				"name": "last_name",
+				"type": "varchar"
+			},
+			{
+				"name": "email",
+				"type": "varchar"
+			},
+			{
+				"name": "city",
+				"type": "varchar"
+			},
+			{
+				"name": "state",
+				"type": "varchar"
+			},
+			{
+				"name": "registration_date",
+				"type": "date"
+			},
+			{
+				"name": "status",
+				"type": "varchar"
+			},
+			{
+				"name": "created_at",
+				"type": "datetime2",
+				"scale": 3
+			},
+			{
+				"name": "updated_at",
+				"type": "datetime2",
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "customer_staging"
+		}
+	}
+}
