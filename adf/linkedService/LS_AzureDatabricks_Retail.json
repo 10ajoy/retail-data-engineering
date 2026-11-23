@@ -1,0 +1,13 @@
+{
+	"name": "LS_AzureDatabricks_Retail",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-7405610713500318.18.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/947d02f2-c768-40a1-a609-f2803e0d6e5e/resourceGroups/rg-retail-dev/providers/Microsoft.Databricks/workspaces/adb-retail-dev-261122",
+			"existingClusterId": "1123-050817-w4fcjd0b"
+		}
+	}
+}
