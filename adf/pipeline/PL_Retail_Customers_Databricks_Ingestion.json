@@ -1,0 +1,126 @@
+{
+	"name": "PL_Retail_Customers_Databricks_Ingestion",
+	"properties": {
+		"activities": [
+			{
+				"name": "Execute_Customers_Incremental_Copy",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Lookup_Customers_Ingestion_Config",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PL_Retail_Customers_Incremental_Copy",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Run_Customers_Incremental_Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Execute_Customers_Incremental_Copy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/retail-data-engineering/07_customers_incremental_from_adf"
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureDatabricks_Retail",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Lookup_Customers_Ingestion_Config",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT TOP 1\n    ingestion_id\nFROM dbo.ingestion_config\nWHERE is_active = 1\n  AND load_type = 'INCREMENTAL'\n  AND source_file_name = 'customers_delta.csv'\nORDER BY ingestion_id DESC;",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DS_Ingestion_Config_SQL",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "SP_Update_Customers_Watermark",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Run_Customers_Incremental_Notebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[usp_update_ingestion_watermark]",
+					"storedProcedureParameters": {
+						"ingestion_id": {
+							"value": {
+								"value": "@activity('Lookup_Customers_Ingestion_Config').output.firstRow.ingestion_id",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"new_watermark_value": {
+							"value": {
+								"value": "@json(activity('Run_Customers_Incremental_Notebook').output.runOutput).new_watermark_value",
+								"type": "Expression"
+							},
+							"type": "Datetime"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_Retail_Metadata",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

@@ -123,14 +123,7 @@
 			{
 				"name": "SP_Update_Customers_Watermark",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "PL_Retail_Customers_Incremental_Copy",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
