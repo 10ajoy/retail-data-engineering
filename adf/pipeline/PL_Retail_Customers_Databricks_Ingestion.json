@@ -100,8 +100,18 @@
 					"storedProcedureName": "[dbo].[usp_update_ingestion_watermark]",
 					"storedProcedureParameters": {
 						"ingestion_id": {
-							"value": "",
-							"type": "Int16"
+							"value": {
+								"value": "@activity('Lookup_Customers_Ingestion_Config').output.firstRow.ingestion_id",
+								"type": "Expression"
+							},
+							"type": "Int32"
+						},
+						"new_watermark_value": {
+							"value": {
+								"value": "@json(activity('Run_Customers_Incremental_Notebook').output.runOutput).new_watermark_value",
+								"type": "Expression"
+							},
+							"type": "Datetime"
 						}
 					}
 				},
