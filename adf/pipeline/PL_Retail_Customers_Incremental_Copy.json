@@ -119,39 +119,6 @@
 						}
 					}
 				]
-			},
-			{
-				"name": "SP_Update_Customers_Watermark",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "[dbo].[usp_update_ingestion_watermark]",
-					"storedProcedureParameters": {
-						"ingestion_id": {
-							"value": {
-								"value": "@activity('Lookup_Customers_Config').output.firstRow.ingestion_id",
-								"type": "Expression"
-							},
-							"type": "Int16"
-						},
-						"new_watermark_value": {
-							"value": "2026-11-20T10:00:00",
-							"type": "Datetime"
-						}
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_Retail_Metadata",
-					"type": "LinkedServiceReference"
-				}
 			}
 		],
 		"annotations": []
