@@ -108,7 +108,7 @@
 						},
 						"new_watermark_value": {
 							"value": {
-								"value": "@json(activity('Run_Customers_Incremental_Notebook').output.runOutput).new_watermark_value",
+								"value": "@activity('Run_Customers_Incremental_Notebook').output.runOutput.new_watermark_value",
 								"type": "Expression"
 							},
 							"type": "Datetime"
